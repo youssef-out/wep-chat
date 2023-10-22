@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>الدردشة</title>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-output" id="chat-output"></div>
+        <input type="text" id="message" placeholder="اكتب رسالتك هنا">
+        <button onclick="sendMessage()">إرسال</button>
+    </div>
+
+    <div class="user-list">
+        <h3>قائمة المستخدمين</h3>
+        <ul id="user-list"></ul>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(function () {
+            var socket = io();
+            $('form').submit(function () {
+                socket.emit('chat message', $('#message').val());
+                $('#message').val('');
+                return false;
+            });
+            socket.on('chat message', function (data) {
+                $('#chat-output').append($('<li>').html(`<strong>${data.username}:</strong> ${data.msg}`));
+            });
+
+            socket.on('user list', function (users) {
+                var userList = $('#user-list');
+                userList.empty();
+                users.forEach(function (user) {
+                    userList.append($('<li>').text(user));
+                });
+            });
+        });
+    </script>
+</body>
+</html>
