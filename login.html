@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>تسجيل الدخول</title>
+</head>
+<body>
+    <div class="login-container">
+        <h2>تسجيل الدخول</h2>
+        <input type="text" id="username" placeholder="اسم المستخدم">
+        <button onclick="login()">تسجيل الدخول</button>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        var socket = io();
+
+        function login() {
+            var username = $('#username').val();
+            if (username) {
+                socket.emit('user connected', username);
+                window.location.replace('/chat.html'); // تحويل المستخدم إلى صفحة الدردشة بعد تسجيل الدخول
+            }
+        }
+    </script>
+</body>
+</html>
